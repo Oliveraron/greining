@@ -1,0 +1,30 @@
+from sympy import symbols, Matrix, nsimplify, solve, Eq, init_printing, simplify
+init_printing(use_latex=True)
+
+def rational(expr):
+    """Simplify to a rational expression"""
+    return nsimplify(expr, rational=True)
+    x, y = symbols('x y')
+
+y = x ** 2 - 1
+
+solve(y, x)
+# Hér skilgreinum við allar spennur, strauma og viðnám eða leiðni (e. conductance)
+V1, V2, G1, G2, G3, G4 = symbols('V1 V2 G1 G2 G3 G4')
+
+# Fyllum inn í fylki A
+A = Matrix([
+    [G1, -G1, 0, 0, 1, 0],
+    [-G1, G1 + G2 + G3, -G3, -G4, 0, 0],
+    [0, -G3, G3, 0, 0, 1],
+    [0, -G4, 0, G4, 0, 0],
+    [1, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0],
+])
+
+b = Matrix([[0, 0, 0, 0, V1, V2]]).T
+
+x = A.LUsolve(b) # Finnum lausn fyrir kerfið
+
+simplify(x) # Notum algebru til að einfalda
+x.subs({'G1': 1, 'G2': 42, 'G3': 3, 'G4': 5, 'V1': 7, 'V2': 42})
